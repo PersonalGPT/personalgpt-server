@@ -1,6 +1,26 @@
 import { ChatCompletionRole } from "../entities/Conversation";
-import { CreateConversation } from "../use-cases/conversation.use-case";
+import { CreateConversation, GetAllConversationsUseCase } from "../use-cases/conversation.use-case";
 import { HTTPController, HTTPRequest, HTTPResponse, HTTPResponseStatus } from "./HTTPController";
+
+export class GetAllConversationsController implements HTTPController {
+  private _getAllConversations: GetAllConversationsUseCase;
+
+  constructor(getAllConversations = new GetAllConversationsUseCase()) {
+    this._getAllConversations = getAllConversations;
+  }
+
+  async processRequest(): Promise<HTTPResponse> {
+    const conversations = await this._getAllConversations.execute();
+
+    return {
+      statusCode: HTTPResponseStatus.OK,
+      body: conversations,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+  }
+}
 
 export class PostConversation implements HTTPController {
   private _createConversation: CreateConversation;
