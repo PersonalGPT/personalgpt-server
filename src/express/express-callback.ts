@@ -4,10 +4,7 @@
 import { Request, Response } from "express";
 import { HTTPController, HTTPRequest, HTTPResponse, HTTPResponseStatus } from "../controllers/HTTPController";
 
-export const initExpressCallback = (
-  controller: HTTPController,
-  callback?: (httpResponse: HTTPResponse, res: Response) => any,
-) => {
+export const initExpressCallback = (controller: HTTPController) => {
   return async (req: Request, res: Response) => {
     // Convert Express request to framework-agnostic format
     const httpRequest: HTTPRequest = {
@@ -25,16 +22,14 @@ export const initExpressCallback = (
 
     // Pass request data to HTTP controller for further processing
     await controller
-      .processRequest(httpRequest)
+      .processRequest(httpRequest, res)
       .then((httpResponse: HTTPResponse) => {
+        // Prevent writing to ended stream
+        if (!res.writable) return;
+
         // Send response back to client w/ proper headers, status code, and body payload
         // In our case, content type can be either application/json or text/event-stream
         if (httpResponse.headers) res.set(httpResponse.headers);
-
-        // Callback can be used to implement custom response logic
-        if (callback) return callback(httpResponse, res);
-
-        res.type("application/json");
         res.status(httpResponse.statusCode).send(httpResponse.body);
       })
       .catch(() =>

@@ -1,3 +1,5 @@
+import { OutgoingMessage } from "http";
+
 export enum HTTPResponseStatus {
   OK = 200,
   Created = 201,
@@ -9,6 +11,8 @@ export enum HTTPResponseStatus {
   NotFound = 404,
   ServerError = 500,
 }
+
+export type ResponseBody = string | object | Buffer | Array<any> | OutgoingMessage;
 
 export type HTTPRequest = {
   body: {
@@ -29,14 +33,15 @@ export type HTTPRequest = {
 
 export type HTTPResponse = {
   statusCode: HTTPResponseStatus;
-  body: {
-    [key: string]: any;
-  };
+  body: ResponseBody;
   headers: {
     [key: string]: any;
   };
 };
 
 export interface HTTPController {
-  processRequest(request?: Partial<HTTPRequest>): Promise<HTTPResponse>;
+  processRequest(
+    request?: Partial<HTTPRequest>,
+    responseHandler?: OutgoingMessage
+  ): Promise<HTTPResponse>;
 }

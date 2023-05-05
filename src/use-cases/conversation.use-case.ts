@@ -29,3 +29,15 @@ export class CreateConversation implements UseCase<Conversation> {
     return conversation;
   }
 }
+
+export class UpdateConversation implements UseCase<Conversation> {
+  private _conversationRepo: ConversationRepository;
+
+  constructor(conversationRepo = new InMemoryConversationRepository()) {
+    this._conversationRepo = conversationRepo;
+  }
+
+  async execute(payload: Pick<Conversation, "id"> & Partial<Conversation>): Promise<Conversation> {
+    return await this._conversationRepo.update(payload.id, payload);
+  }
+}
