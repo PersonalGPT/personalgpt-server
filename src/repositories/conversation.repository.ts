@@ -8,6 +8,7 @@ export class InMemoryConversationRepository implements ConversationRepository {
     const conversations = Array.from(db.values());
     const previews: ConversationPreview[] = conversations.map(convo => ({
       id: convo.id,
+      createdAt: convo.createdAt,
       title: convo.title,
     }));
 

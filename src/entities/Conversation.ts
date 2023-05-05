@@ -26,6 +26,7 @@ export const createNewConversation = ({
 }: Partial<Conversation>): Readonly<Conversation> =>
   Object.freeze({
     id: randomUUID(),
+    createdAt: Date.now(),
     title,
     messages,
   });
