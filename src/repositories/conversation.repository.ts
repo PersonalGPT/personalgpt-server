@@ -1,11 +1,17 @@
-import { Conversation, createNewConversation } from "../entities/Conversation";
+import { Conversation, ConversationPreview, createNewConversation } from "../entities/Conversation";
 import { ConversationRepository } from "./ConversationRepository";
 
 const db = new Map<string, Conversation>();
 
 export class InMemoryConversationRepository implements ConversationRepository {
-  async getAll(): Promise<Conversation[]> {
-    return Array.from(db.values());
+  async getAll(): Promise<ConversationPreview[]> {
+    const conversations = Array.from(db.values());
+    const previews: ConversationPreview[] = conversations.map(convo => ({
+      id: convo.id,
+      title: convo.title,
+    }));
+
+    return previews;
   }
 
   async getById(id: string): Promise<Conversation> {

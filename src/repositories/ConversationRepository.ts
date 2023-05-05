@@ -1,4 +1,4 @@
 import { Repository } from "./Repository";
-import { Conversation } from "../entities/Conversation";
+import { Conversation, ConversationPreview } from "../entities/Conversation";
 
-export type ConversationRepository = Repository<Conversation>;
+export type ConversationRepository = Repository<Conversation, ConversationPreview>;
