@@ -1,5 +1,5 @@
 import express from "express"
-import { GetAllConversationsController, GetConversationByIdController, PostConversation } from "../../controllers/conversation.controller";
+import { GetAllConversationsController, GetConversationByIdController, PatchConversation, PostConversation } from "../../controllers/conversation.controller";
 import { initExpressCallback } from "../../express/express-callback";
 
 export const initGetAllConversationsRouter = (
@@ -32,12 +32,23 @@ export const initPostConversationRouter = (
   return router;
 };
 
+export const initPatchConversationRouter = (
+  patchConversation = initExpressCallback(new PatchConversation())
+) => {
+  const router = express.Router();
+
+  router.patch("/", patchConversation);
+
+  return router;
+};
+
 const router = express.Router();
 
 router.use([
   initGetAllConversationsRouter(),
   initGetConversationByIdRouter(),
   initPostConversationRouter(),
+  initPatchConversationRouter(),
 ]);
 
 export default router;
