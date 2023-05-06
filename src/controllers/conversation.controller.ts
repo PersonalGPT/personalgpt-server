@@ -1,5 +1,6 @@
-import { ChatCompletionRole } from "../entities/Conversation";
-import { CreateConversation, GetAllConversationsUseCase, GetConversationByIdUseCase } from "../use-cases/conversation.use-case";
+import { OutgoingMessage, IncomingMessage } from "http";
+import { ChatCompletionRole, Conversation } from "../entities/Conversation";
+import { CreateConversation, GetAllConversationsUseCase, GetConversationByIdUseCase, UpdateConversation } from "../use-cases/conversation.use-case";
 import { HTTPController, HTTPRequest, HTTPResponse, HTTPResponseStatus } from "./HTTPController";
 
 export class GetAllConversationsController implements HTTPController {
@@ -76,6 +77,27 @@ export class PostConversation implements HTTPController {
     return {
       statusCode: HTTPResponseStatus.Created,
       body: conversation,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+  }
+}
+
+export class PatchConversation implements HTTPController {
+  private _updateConversation: UpdateConversation;
+
+  constructor(updateConversation = new UpdateConversation()) {
+    this._updateConversation = updateConversation;
+  }
+
+  async processRequest(request: Pick<HTTPRequest, "body">): Promise<HTTPResponse> {
+    const { id } = request.body;
+    const replaced = await this._updateConversation.execute({ id, ...request.body });
+
+    return {
+      statusCode: HTTPResponseStatus.OK,
+      body: replaced,
       headers: {
         "Content-Type": "application/json",
       },
