@@ -1,4 +1,5 @@
 import { randomUUID } from "crypto";
+import { BaseEntity } from "./BaseEntity";
 
 export enum ChatCompletionRole {
   SYSTEM = "system",
@@ -12,11 +13,12 @@ export interface ChatCompletionMessage {
   name?: string;
 }
 
-export type Conversation = {
-  id: string;
+export interface Conversation extends BaseEntity {
   title: string;
   messages: ChatCompletionMessage[];
 }
+
+export type ConversationPreview = Omit<Conversation, "messages">;
 
 export const createNewConversation = ({
   title = "New Conversation",
@@ -24,6 +26,7 @@ export const createNewConversation = ({
 }: Partial<Conversation>): Readonly<Conversation> =>
   Object.freeze({
     id: randomUUID(),
+    createdAt: Date.now(),
     title,
     messages,
   });

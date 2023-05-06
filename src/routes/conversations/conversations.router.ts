@@ -1,5 +1,5 @@
 import express from "express"
-import { GetAllConversationsController, PostConversation } from "../../controllers/conversation.controller";
+import { GetAllConversationsController, GetConversationByIdController, PostConversation } from "../../controllers/conversation.controller";
 import { initExpressCallback } from "../../express/express-callback";
 
 export const initGetAllConversationsRouter = (
@@ -11,6 +11,16 @@ export const initGetAllConversationsRouter = (
 
   return router;
 };
+
+export const initGetConversationByIdRouter = (
+  getConversationById = initExpressCallback(new GetConversationByIdController())
+) => {
+  const router = express.Router();
+
+  router.get("/:id", getConversationById);
+
+  return router;
+}
 
 export const initPostConversationRouter = (
   postConversation = initExpressCallback(new PostConversation())
@@ -26,6 +36,7 @@ const router = express.Router();
 
 router.use([
   initGetAllConversationsRouter(),
+  initGetConversationByIdRouter(),
   initPostConversationRouter(),
 ]);
 

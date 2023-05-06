@@ -1,17 +1,29 @@
-import { Conversation, createNewConversation } from "../entities/Conversation";
+import { Conversation, ConversationPreview, createNewConversation } from "../entities/Conversation";
 import { ConversationRepository } from "../repositories/ConversationRepository";
 import { InMemoryConversationRepository } from "../repositories/conversation.repository";
 import { UseCase } from "./UseCase";
 
-export class GetAllConversationsUseCase implements UseCase<Conversation[]> {
+export class GetAllConversationsUseCase implements UseCase<ConversationPreview[]> {
   private _conversationRepo: ConversationRepository;
 
   constructor(conversationRepo = new InMemoryConversationRepository()) {
     this._conversationRepo = conversationRepo;
   }
 
-  async execute(): Promise<Conversation[]> {
+  async execute(): Promise<ConversationPreview[]> {
     return await this._conversationRepo.getAll();
+  }
+}
+
+export class GetConversationByIdUseCase implements UseCase<Conversation> {
+  private _conversationRepo: ConversationRepository;
+
+  constructor(conversationRepo = new InMemoryConversationRepository()) {
+    this._conversationRepo = conversationRepo;
+  }
+
+  async execute(payload: string): Promise<Conversation> {
+    return await this._conversationRepo.getById(payload);
   }
 }
 

@@ -44,7 +44,6 @@ export class PostChatCompletion implements HTTPController {
           // Write data to response stream
           if (token) {
             content += token;
-            console.log(content);
             responseHandler.write(token);
           }
         }

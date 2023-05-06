@@ -1,5 +1,7 @@
-export interface Read<T> {
-  getAll(): Promise<T[]>;
+import { BaseEntity } from "../entities/BaseEntity";
+
+export interface Read<T, P> {
+  getAll(): Promise<P[]>;
   getById(id: string): Promise<T>;
   exists(id: string): Promise<boolean>;
 }
@@ -9,4 +11,7 @@ export interface Write<T> {
   update(id: string, replacement: Partial<T>): Promise<T>;
 }
 
-export interface Repository<T> extends Read<T>, Write<T> { }
+export interface Repository<
+  T extends BaseEntity,
+  P extends BaseEntity
+> extends Read<T, P>, Write<T> { }
