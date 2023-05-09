@@ -5,7 +5,7 @@ const db = new Map<string, Conversation>();
 
 export class InMemoryConversationRepository implements ConversationRepository {
   async getAll(): Promise<ConversationPreview[]> {
-    const conversations = Array.from(db.values());
+    const conversations = Array.from(db.values()).sort((a, b) => b.createdAt - a.createdAt);
     const previews: ConversationPreview[] = conversations.map(convo => ({
       id: convo.id,
       createdAt: convo.createdAt,
