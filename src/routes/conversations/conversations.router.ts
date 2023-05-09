@@ -1,5 +1,5 @@
 import express from "express"
-import { GetAllConversationsController, GetConversationByIdController, PatchConversation, PostConversation } from "../../controllers/conversation.controller";
+import { DeleteConversationController, GetAllConversationsController, GetConversationByIdController, PatchConversation, PostConversation } from "../../controllers/conversation.controller";
 import { initExpressCallback } from "../../express/express-callback";
 
 export const initGetAllConversationsRouter = (
@@ -42,6 +42,16 @@ export const initPatchConversationRouter = (
   return router;
 };
 
+export const initDeleteConversationRouter = (
+  deleteConversation = initExpressCallback(new DeleteConversationController())
+) => {
+  const router = express.Router();
+
+  router.delete("/:id", deleteConversation);
+
+  return router;
+}
+
 const router = express.Router();
 
 router.use([
@@ -49,6 +59,7 @@ router.use([
   initGetConversationByIdRouter(),
   initPostConversationRouter(),
   initPatchConversationRouter(),
+  initDeleteConversationRouter(),
 ]);
 
 export default router;

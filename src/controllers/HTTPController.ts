@@ -12,7 +12,8 @@ export enum HTTPResponseStatus {
   ServerError = 500,
 }
 
-export type ResponseBody = string | object | Buffer | Array<any> | OutgoingMessage;
+export type ResponseBody =
+  string | object | boolean | Buffer | Array<any> | OutgoingMessage;
 
 export type HTTPRequest = {
   body: {

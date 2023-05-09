@@ -1,6 +1,5 @@
-import { OutgoingMessage, IncomingMessage } from "http";
-import { ChatCompletionRole, Conversation } from "../entities/Conversation";
-import { CreateConversation, GetAllConversationsUseCase, GetConversationByIdUseCase, UpdateConversation } from "../use-cases/conversation.use-case";
+import { ChatCompletionRole, } from "../entities/Conversation";
+import { CreateConversation, DeleteConversationUseCase, GetAllConversationsUseCase, GetConversationByIdUseCase, UpdateConversation } from "../use-cases/conversation.use-case";
 import { HTTPController, HTTPRequest, HTTPResponse, HTTPResponseStatus } from "./HTTPController";
 
 export class GetAllConversationsController implements HTTPController {
@@ -102,5 +101,26 @@ export class PatchConversation implements HTTPController {
         "Content-Type": "application/json",
       },
     };
+  }
+}
+
+export class DeleteConversationController implements HTTPController {
+  private _deleteConversation: DeleteConversationUseCase;
+
+  constructor(deleteConversation = new DeleteConversationUseCase()) {
+    this._deleteConversation = deleteConversation;
+  }
+
+  async processRequest(request: Pick<HTTPRequest, "params">): Promise<HTTPResponse> {
+    const { id } = request.params;
+    const existed = await this._deleteConversation.execute({ id });
+
+    return {
+      statusCode: HTTPResponseStatus.OK,
+      body: existed,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
   }
 }
