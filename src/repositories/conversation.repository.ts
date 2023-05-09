@@ -60,4 +60,8 @@ export class InMemoryConversationRepository implements ConversationRepository {
       return conversation;
     }
   }
+
+  async delete(id: string): Promise<boolean> {
+    return db.delete(id);
+  }
 }

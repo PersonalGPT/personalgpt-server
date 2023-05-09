@@ -53,3 +53,15 @@ export class UpdateConversation implements UseCase<Conversation> {
     return await this._conversationRepo.update(payload.id, payload);
   }
 }
+
+export class DeleteConversationUseCase implements UseCase<boolean> {
+  private _conversationRepo: ConversationRepository;
+
+  constructor(conversationRepo = new InMemoryConversationRepository()) {
+    this._conversationRepo = conversationRepo;
+  }
+
+  async execute(payload: Pick<Conversation, "id">): Promise<boolean> {
+    return await this._conversationRepo.delete(payload.id);
+  }
+}

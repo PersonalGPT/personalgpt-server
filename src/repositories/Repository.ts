@@ -9,6 +9,7 @@ export interface Read<T, P> {
 export interface Write<T> {
   insert(item: T): Promise<boolean>;
   update(id: string, replacement: Partial<T>): Promise<T>;
+  delete(id: string): Promise<boolean>;
 }
 
 export interface Repository<
